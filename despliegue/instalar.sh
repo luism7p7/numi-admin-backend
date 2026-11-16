@@ -38,15 +38,17 @@ D=repos/numi-admin-backend/despliegue
 cp "$D/compose.yaml" compose.yaml
 rm -f nginx/conf.d/*.conf
 cp "$D/nginx/numi.conf" "$D/nginx/proxy_headers.inc" nginx/conf.d/
+cp "$D/verificacion_ssh.sh" "$BASE/verificacion_ssh.sh"
 
 echo "== 5. Contenedores"
 docker compose up -d --build --remove-orphans
 sleep 5
 docker compose exec -T nginx nginx -t
+docker compose exec -T nginx nginx -s reload
 
 echo "== 6. Renovación automática del certificado (todos los días a las 03:15)"
 LINEA="15 3 * * * cd $BASE && docker compose run --rm certbot renew --webroot -w /var/www/certbot --quiet && docker compose exec -T nginx nginx -s reload"
-( crontab -l 2>/dev/null | grep -v 'certbot renew' ; echo "$LINEA" ) | crontab -
+{ crontab -l 2>/dev/null | grep -v 'certbot renew' || true; echo "$LINEA"; } | crontab -
 
 docker compose ps
 echo "Listo: https://$DNS  (administrativo)   https://$DNS:8443  (docente)"
