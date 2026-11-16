@@ -127,6 +127,8 @@ paso "Desde afuera solo responden 80/443/8080/8443; MySQL (3306) y los backends 
 for p in 3306 5000 5001; do
   cmd "timeout 4 bash -c '</dev/tcp/$DNS/$p' && echo 'puerto $p ABIERTO' || echo 'puerto $p cerrado desde afuera'"
 done
+paso "SSH: solo con llave (sin contraseña) y el NSG solo lo deja pasar desde la IP del administrador"
+cmd "sudo sshd -T | grep -E '^(passwordauthentication|pubkeyauthentication|permitrootlogin) '"
 paso "Las rutas internas de Nginx no se pueden pedir desde el navegador"
 cmd "curl -s -o /dev/null -w '%{http_code}  /_sesion\n' https://$DNS/_sesion"
 cmd "curl -s -o /dev/null -w '%{http_code}  /app.py\n' https://$DNS/app.py"
