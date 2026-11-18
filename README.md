@@ -1,3 +1,13 @@
+# Repositorio en desuso
+
+Este backend era de la primera versión del despliegue. Desde el 18/11/2026 los dos paneles usan **una sola API**:
+
+- Backend: https://github.com/luism7p7/numi-api
+- Frontend administrativo: https://github.com/luism7p7/numi-admin-frontend
+- Frontend docente: https://github.com/luism7p7/numi-docente-frontend
+
+---
+
 # Numi · Panel administrativo · Backend
 
 API del panel administrativo de **Numi** (Python 3.12, Flask 3, MySQL 8 con PyMySQL). También tiene el
